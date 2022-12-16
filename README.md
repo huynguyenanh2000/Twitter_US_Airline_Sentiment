@@ -53,7 +53,7 @@ In this project, I used Twistter US Airline Sentiment dataset to find out what p
 
 ## **Results**
 
-The main findings can be found at the Medium blog post I have written[https://medium.com/@huynguyenanh24/twistter-us-airline-sentiment-analysis-b4bed7a04d10].
+The main findings can be found at the Medium blog post I have written [here](https://medium.com/@huynguyenanh24/twistter-us-airline-sentiment-analysis-b4bed7a04d10).
 
 
 ## **Acknowledgements**
