@@ -1,61 +1,76 @@
-# **Twistter Us Airline Sentiment Analysis**
+# **Disaster Response Pipeline Project**
 
 
 ## **Table of contents**
 
-- [Installations](#installations)
-- [Project Motivation](#project-motivations)
-- [File Descriptions](#file-descriptions)
+- [Environment Setup](#environment-setup)
+- [Project Descriptions](#project-descriptions)
+- [File Structure](#file-structure)
 - [Usage](#usage)
-- [Results](#results)
-- [Acknowledgements](#acknowledgements)
 
 
-## **Installations**
+## **Environment Setup**
 
 **Environment**
 - OS: Windows 11
 
 - Interpreter: Visual Studio Code
 
-- Python version: Python 3.7.15
+- Python version: Python 3.7
 
 **Libraries**
-- Pandas
-- Numpy
-- Scikit-learn
-- Matplotlib
-- Plotly
-- Seaborn
-- Spacy
-- Nltk
+- Install all packages using requirements.txt file using `pip install -r requirements.txt` command.
+
+**Link to GitHub Repository**
+
+`https://github.com/huynguyenanh2000/Twitter_US_Airline_Sentiment.git`
 
 
+## **Project Descriptions**
 
-## **Project Motivation**
-This Github repo is part of Udacity Data Scientists Nanodegree Program.
+This project is a part of Udacity Data Scientist Nanodegree program. 
 
-In this project, I used Twistter US Airline Sentiment dataset to find out what problems people have commented on with airlines in the US to improve service and created models to categorize comments as positive, negative, or neutral.
+### **Project Overview**
+This project takes feedback from customers using flight services of airlines in the US and classifies it as negative, positive or neutral.
 
+### **Problem Statement**
+The purpose of this project is to train and evaluate the machine learning model to classify text as customer reviews about flight services with the best accuracy. 
 
-## **File Descriptions**
+### **Metrics** ####
+Because this is a classification problem, i choose accuracy metrics. The metrics is calculated with classification report on test set.
 
-- twistter_us_airline_sentiment_analysis.ipynb notebook contains a complete analysis, clearly explains them with visualizations and model to classify reviews of customer.
-- tweets.csv file located in dataset/ folder is the original dataset in csv format
+## **File Structure**
+
+~~~~~~~
+twister_us_airline_sentiment
+    |-- app
+        |-- templates
+                |-- go.html
+                |-- master.html
+        |-- run.py
+    |-- data
+        |-- TweetsETL.db
+        |-- Tweets.csv
+        |-- process_data.py
+    |-- models
+        |-- TweetsModel.pkl
+        |-- train_classifier.py
+    |-- README
+    |-- requirements.txt
+~~~~~~~
 
 
 ## **Usage**
 
-- Install all packages using requirements.txt file. This is the command to install: `pip install -r requirements.txt`
+1. Run the following commands in the project's root directory to set up your database and model.
 
-- Run all cells in the notebook file.
+    - To run ETL pipeline that cleans data and stores in database
+        `python data/process_data.py data/Tweets.csv  data/TweetsETL.db`
+    - To run ML pipeline that trains classifier and saves
+        `python models/train_classifier.py data/TweetsETL.db models/TweetsModel.pkl`
 
+2. Go to `app` directory: `cd app`
 
-## **Results**
+3. Run your web app: `python run.py`
 
-The main findings can be found at the Medium blog post I have written [here](https://medium.com/@huynguyenanh24/twistter-us-airline-sentiment-analysis-b4bed7a04d10).
-
-
-## **Acknowledgements**
-
-- Data Source: [Twitter US Airline Sentiment](https://www.kaggle.com/datasets/crowdflower/twitter-airline-sentiment)
+4. Click the `PREVIEW` button to open the homepage

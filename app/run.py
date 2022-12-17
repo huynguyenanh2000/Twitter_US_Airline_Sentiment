@@ -27,85 +27,88 @@ def tokenize(text):
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/TweetsETL.db')
+engine = create_engine('sqlite:///data/TweetsETL.db')
 df = pd.read_sql_table('TweetsETL', engine)
 
 # load model
-model = joblib.load("../models/TweetsModel.pkl")
+model = joblib.load("./../models/TweetsModel.pkl")
 
 
 # index webpage displays cool visuals and receives user input text for model
 @app.route('/')
-# @app.route('/index')
-# def index():
+@app.route('/index')
+def index():
     
-#     # extract data needed for visuals
-#     # TODO: Below is an example - modify to extract data for your own visuals
-#     genre_counts = df.groupby('genre').count()['message']
-#     genre_names = list(genre_counts.index)
+    # extract data needed for visuals
+    # TODO: Below is an example - modify to extract data for your own visuals
+    df['count'] = 1
+    dfVis = df.groupby(['airline', 'airline_sentiment']).sum().reset_index()
+    dfVis  = dfVis.pivot(index = 'airline', columns = 'airline_sentiment', values = 'count').reset_index()
+    dfVis.rename(columns = {'airline': 'airline',-1:'negative', 0:'neutral', 1:'positive'}, inplace = True)
     
-#     # create visuals
-#     # TODO: Below is an example - modify to create your own visuals
-#     graphs = [
-#         {
-#             'data': [
-#                 Bar(
-#                     x=genre_names,
-#                     y=genre_counts
-#                 )
-#             ],
+    # create visuals
+    # TODO: Below is an example - modify to create your own visuals
+    graphs = [
+        {
+            'data': [
+                Bar(
+                    x=dfVis['airline'],
+                    y=dfVis['negative']
+                )
+            ],
 
-#             'layout': {
-#                 'title': 'Distribution of Message Genres',
-#                 'yaxis': {
-#                     'title': "Count"
-#                 },
-#                 'xaxis': {
-#                     'title': "Genre"
-#                 }
-#             }
-#         },
+            'layout': {
+                'title': 'Distribution of Message Genres',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Genre"
+                }
+            }
+        },
 
-#        {
-#             'data': [
-#                 Bar(
-#                     x=category_names,
-#                     y=category_counts
-#                 )
-#             ],
+       {
+            'data': [
+                Bar(
+                    x=dfVis['airline'],
+                    y=dfVis['positive']
+                )
+            ],
 
-#             'layout': {
-#                 'title': 'Distribution of Message Categories',
-#                 'yaxis': {
-#                     'title': "Count"
-#                 },
-#                 'xaxis': {
-#                     'title': "Category",
-#                     'tickangle': -90
-#                 }
-#             }
-#         }
+            'layout': {
+                'title': 'Distribution of Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Category",
+                    'tickangle': -90
+                }
+            }
+        }
 
         
-#     ]
+    ]
     
-#     # encode plotly graphs in JSON
-#     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
-#     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+    # encode plotly graphs in JSON
+    ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
+    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
     
-#     # render web page with plotly graphs
-#     return render_template('master.html', ids=ids, graphJSON=graphJSON)
+    # render web page with plotly graphs
+    return render_template('master.html', ids=ids, graphJSON=graphJSON)
 
 
 # web page that handles user query and displays model results
 @app.route('/go')
 def go():
     # save user input in query
-    query = request.args.get('query', '') 
+    query = request.args.get('query', '')
 
     # use model to predict classification for query
-    classification_labels = model.predict([query])[0]
-    classification_results = dict(zip(df.columns[4:], classification_labels))
+    classification_labels = model.predict([query])
+    classification_labels = map({-1:'Negative', 0:'Neutral', 1:'Positive'}.get, classification_labels)
+    classification_results = dict(zip(df.columns[-2:-1], classification_labels))
 
     # This will render the go.html Please see that file. 
     return render_template(
@@ -117,6 +120,8 @@ def go():
 
 def main():
     app.run(host='0.0.0.0', port=3000, debug=True)
+   
+  
 
 
 if __name__ == '__main__':
