@@ -55,6 +55,8 @@ twister_us_airline_sentiment
     |-- models
         |-- TweetsModel.pkl
         |-- train_classifier.py
+    |-- notebook
+        |-- tweets.ipynb
     |-- README
     |-- requirements.txt
 ~~~~~~~
